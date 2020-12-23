@@ -33,4 +33,22 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     for(i <- 1 to 10){ numbers = i :: numbers }
     Ok(views.html.index("PUT", "/contact", numbers))
   }
+
+  def text1() = Action { implicit request: Request[AnyContent] =>
+    Ok("1111")
+  }
+
+//  def hello(): Action[AnyContent] = Action.apply(new Status(200)) // Scalaにおいてapplyメソッドは省略可能
+//  def hello(): Action[AnyContent] = Action(new Status(200))
+//  def hello(): Action[AnyContent] = Action(Ok) // OKが定数オブジェクトとして存在する
+  def hello() = Action { implicit request: Request[AnyContent] => {
+//      val result = Ok("Hello World")
+      var aaa = 1
+      Ok("Hello World").as("text/plain").withHeaders(
+        CACHE_CONTROL -> "max-age=3600",
+        ETAG -> "xx")
+
+    }
+  }
+
 }
