@@ -1,0 +1,9 @@
+@(numbers: List[Int])
+<div>
+    @for(number <- numbers) {
+        @@ 2つならべると半角の＠
+        @* コメント *@
+        @* カッコ内が評価されてHTMLに吐き出される *@
+        <li>@("No." + number.toString())</li>
+    }
+</div>
