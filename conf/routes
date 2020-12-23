@@ -10,5 +10,11 @@ PUT     /contact                           controllers.HomeController.put
 GET     /text1                           controllers.HomeController.text1
 GET     /hello                           controllers.HomeController.hello
 
+GET     /form_sample                           controllers.FormSampleController.index
+POST     /form_sample                           controllers.FormSampleController.post
+
+# GET     /users                           controllers.UserController.index
+# POST     /users                           controllers.UserController.post
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

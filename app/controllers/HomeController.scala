@@ -34,6 +34,8 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.index("PUT", "/contact", numbers))
   }
 
+  // テキストを吐き出す場合は文字列を渡す
+  // APIを作る場合も同じ手法(ただしheaderのcontent-typeを変更して返すようにする)
   def text1() = Action { implicit request: Request[AnyContent] =>
     Ok("1111")
   }
@@ -50,5 +52,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 
     }
   }
+
+
 
 }
