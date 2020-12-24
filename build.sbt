@@ -12,9 +12,19 @@ libraryDependencies ++= Seq(
 //  javaEbean, // 参照：https://stackoverflow.com/questions/42225731/cant-configure-ebean-play-framework-2-5-x
 //  cache,
   filters, //追加
-  "org.jongo" % "jongo" % "1.0", // 追加
-  "org.mongodb" % "mongo-java-driver" % "2.11.4", // 追加
+
+  // RDB
+  "joda-time" % "joda-time" % "2.3",
+  "org.xerial" % "sqlite-jdbc" % "3.8.6",
+  
+  // NoSQL
+  "org.jongo" % "jongo" % "1.0",
+  "org.mongodb" % "mongo-java-driver" % "2.11.4",
+  
+  // Util
   "com.google.code.gson" % "gson" % "2.2.4"
+  
+  
 )
 
 scalaVersion := "2.13.3"

@@ -2,14 +2,17 @@ package controllers
 
 import javax.inject._
 import play.api._
+import play.api.db.DBApi
 import play.api.mvc._
+
+import java.sql.ResultSet
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+class HomeController @Inject()(dbApi : DBApi, val controllerComponents: ControllerComponents) extends BaseController {
 
   /**
    * Create an Action to render an HTML page.
@@ -19,6 +22,28 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
    * a path of `/`.
    */
   def index() = Action { implicit request: Request[AnyContent] =>
+
+    // DBを複数使う場合はapplication.confに設定を追加し、↓のdefaultの部分を変えて呼び出す
+    val db = dbApi.database("default")
+
+    db.withConnection { implicit conn =>
+      // do whatever you need with the connection
+
+      val stmt = conn.createStatement()
+//      var query = "SELECT * FROM users"
+      var query = "CREATE TABLE IF NOT EXISTS users(id INTEGER, name TEXT);"
+      stmt.execute(query)
+
+//      val statement = connection.createStatement()
+//      val resultSet = statement.executeQuery("SELECT name from person where id = 1")
+//
+//      while (resultSet.next()) {
+//        // 結果の取得(outStringへshikaが追記される)
+//        outString += resultSet.getString("name")
+//      }
+
+    }
+
     var numbers = List.empty[Int]
     for(i <- 1 to 10){ numbers = i :: numbers }
     Ok(views.html.index("GET", "/", numbers))
