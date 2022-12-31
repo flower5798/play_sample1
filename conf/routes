@@ -8,6 +8,7 @@ GET     /                           controllers.HomeController.index
 POST     /contact                           controllers.HomeController.post
 PUT     /contact                           controllers.HomeController.put
 GET     /text1                           controllers.HomeController.text1
+GET     /text2                           controllers.HomeController.text2
 GET     /hello                           controllers.HomeController.hello
 
 GET     /form_sample                           controllers.FormSampleController.index

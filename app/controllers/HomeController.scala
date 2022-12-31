@@ -1,11 +1,16 @@
 package controllers
 
-import javax.inject._
-import play.api._
+import akka.stream.scaladsl.StreamConverters
 import play.api.db.DBApi
 import play.api.mvc._
 
-import java.sql.ResultSet
+import java.io._
+import javax.inject._
+
+// import java.io.FileOutputStream;
+// import java.io.IOException;
+import java.nio.charset.StandardCharsets
+import java.util.zip.{ZipEntry, ZipOutputStream}
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -63,6 +68,47 @@ class HomeController @Inject()(dbApi : DBApi, val controllerComponents: Controll
   // APIを作る場合も同じ手法(ただしheaderのcontent-typeを変更して返すようにする)
   def text1() = Action { implicit request: Request[AnyContent] =>
     Ok("1111")
+  }
+
+  def generateTextFile(filename: String, content: String){
+    val text = content
+    val file = new File(filename)
+    val bw = new BufferedWriter(new FileWriter(file))
+    bw.write(text)
+    bw.close()
+    return file
+  }
+
+  def text2() = Action { implicit request: Request[AnyContent] =>
+//    val file1 = generateTextFile("file1.txt", "1111")
+//    val file2 = generateTextFile("file2.txt", "2222")
+
+    // ファイルは作成せずメモリ上にのみ保持
+    val files = Seq("1111.txt", "2222.txt")
+    val baos = generateZipOutputStream(files)
+
+    val ios = new ByteArrayInputStream(baos.toByteArray)
+
+    Ok.chunked(StreamConverters.fromInputStream(() => ios)).withHeaders(
+      CONTENT_TYPE -> "application/zip",
+      CONTENT_DISPOSITION -> s"attachment; filename = test114514.zip"
+    )
+  }
+
+  def generateZipOutputStream(files: Seq[String]): ByteArrayOutputStream = {
+    val os = new ByteArrayOutputStream()
+    val zip = new ZipOutputStream(os)
+
+    files.foreach { name =>
+      zip.putNextEntry(new ZipEntry(name))
+      // TODO bの内容を正しいもの(テキストファイルの内容)へ修正(tuple等を使用して、ファイル名とコンテンツの両方を入れる)
+      val b = name.getBytes(StandardCharsets.UTF_8);
+      zip.write(b)
+      zip.closeEntry()
+    }
+    zip.close()
+
+    os
   }
 
 //  def hello(): Action[AnyContent] = Action.apply(new Status(200)) // Scalaにおいてapplyメソッドは省略可能
